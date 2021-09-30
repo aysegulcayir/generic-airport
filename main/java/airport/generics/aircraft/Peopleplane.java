@@ -15,8 +15,9 @@ public final class Peopleplane extends Airplane {
     }
 
     @Override
-    public void load(int load){
+    public int load(int load){
         this.currentPassengersLoad = this.currentPassengersLoad + load;
+        return load;
     }
 
     @Override

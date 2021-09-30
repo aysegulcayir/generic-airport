@@ -15,8 +15,9 @@ public final class Cargoplane extends Airplane {
     }
 
     @Override
-    public void load(int load){
+    public int load(int load){
         this.currentCargoLoad = this.currentCargoLoad + load;
+        return load;
     }
 
     @Override

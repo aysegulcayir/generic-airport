@@ -1,11 +1,8 @@
 package airport.generics.aircraft;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public class Airport <T extends Airplane>{
+public class Airport<T extends Airplane> {
     private long id;
     private String name;
     private List<T> airplanes = new ArrayList<>();
@@ -33,32 +30,44 @@ public class Airport <T extends Airplane>{
 
     public void load(String planeIdentification, int load) {
 
-        T t = getAirplane( planeIdentification);
+        T t = getAirplane(planeIdentification);
 
         System.out.print("(Using list) Attempting to load plane: " + planeIdentification + " " + t.toString());
 
-        if( t == null){
-            System.out.println( " ERROR:  no such plane!");
+        if (t == null) {
+            System.out.println(" ERROR:  no such plane!");
             return;
         }
 
         t.load(load);
-        System.out.println( " OK: " + load + " loaded!");
-
+        System.out.println(" OK: " + load + " loaded!");
     }
+
+    //load with stream
+    public int loadAirplane(String id, int amount) {
+
+        Airplane airplane = airplanes.stream().
+                filter(airplane1 -> airplane1.getPlaneIdentification().equals(id)).findFirst().get();
+
+        if (airplane.equals(null))
+            System.out.println(" ERROR:  no such plane!" + id);
+
+        return airplane.load(amount);
+    }
+
     public void loadByMap(String planeIdentification, int load) {
 
-        T t = airplanesMap.get( planeIdentification);///*********
+        T t = airplanesMap.get(planeIdentification);///*********
 
         System.out.print("(Using map) Attempting to load plane: " + planeIdentification);
 
-        if( t == null){
-            System.out.println( " ERROR:  no such plane!");
+        if (t == null) {
+            System.out.println(" ERROR:  no such plane!");
             return;
         }
 
         t.load(load);
-        System.out.println( " OK: " + load + " loaded!");
+        System.out.println(" OK: " + load + " loaded!");
 
     }
 
@@ -66,26 +75,45 @@ public class Airport <T extends Airplane>{
 
     }
 
-    private T getAirplane( String planeIdentification){
+    private T getAirplane(String planeIdentification) {
 
-        for (T t: airplanes){
+        for (T t : airplanes) {
 
-            if( t.getPlaneIdentification().equals(planeIdentification)){
+            if (t.getPlaneIdentification().equals(planeIdentification)) {
+                return t;
+            }
+        }
+        return null;
+    }
+
+    //Get plane with stream
+    private Airplane getStreamPlane(String planeIdentification) {
+        Airplane airplane = airplanes.stream()
+                .filter(i -> (i.getPlaneIdentification()).equals(planeIdentification)).findFirst().get();
+
+        return airplane;
+    }
+
+    public T getAllPlaneByType(String type) {
+
+        for (T t : airplanes) {
+            if (t.toString().equals(type)) {
                 return t;
             }
         }
         return null;
 
     }
-    public T getAllPlaneByType(String type){
+    // get plane type with stream
+    public Airplane getAllPlaneByTypeWithStream(String type) {
+        Airplane airplane = airplanes.stream()
+                .filter(airplane1->airplane1.toString().equals(type))
+                .findFirst().get();
+        return airplane;
 
-        for (T t: airplanes){
-            if( t.toString().equals(type)){
-                return t;
-            }
-        }return null;
+    }
 
-}
+
 
     @Override
     public String toString() {
